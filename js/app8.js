@@ -1,8 +1,11 @@
 function listeners(){
+    document.addEventListener("DOMContentLoaded", cargarCursosLocalStorage);
     todosCursos.addEventListener("click", meterCurso)
     carro.addEventListener("click", borrarCurso)
     eliminarCarro.addEventListener("click", () => {
         listaProductos.splice(0)
+        alterarCarro(listaProductos)
+        sincronizarLocalStorage()
     })
 }
 
@@ -64,6 +67,8 @@ function alterarCarro() {
         `
         contenedorCarrito.appendChild(row)
     })
+
+    sincronizarLocalStorage()
 }
 
 function borrarCurso(elemento){
@@ -72,4 +77,13 @@ function borrarCurso(elemento){
         listaProductos = listaProductos.filter((curso) => curso.id !== cursoId)
     }
     alterarCarro(listaProductos)
+}
+
+function cargarCursosLocalStorage() {
+    listaProductos = JSON.parse(localStorage.getItem("carrito")) || []
+    alterarCarro(listaProductos)
+}
+
+function sincronizarLocalStorage() {
+    localStorage.setItem("carrito", JSON.stringify(listaProductos))
 }
